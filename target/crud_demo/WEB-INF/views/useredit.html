@@ -1,0 +1,57 @@
+<%layout("/common/layout.html",{title:"用户添加"}){ %>
+<form action="{:U('User/edit')}" method="post" class="definewidth m20">
+<input type="hidden" name="id" value="{$user.id}" />
+    <table class="table table-bordered table-hover definewidth m10">
+        <tr>
+            <td width="10%" class="tableleft">用户ID</td>
+            <td><input type="text" id="txtuserid" value="${user.userID}"/></td>
+        </tr>
+        <tr>
+            <td class="tableleft">用户名称</td>
+            <td><input type="text" id="txtusername" value="${user.userName}"/></td>
+        </tr>
+        <tr>
+            <td class="tableleft">用户密码</td>
+            <td><input type="text" id="txtuserpwd" value="${user.userPwd}"/></td>
+        </tr>
+        <tr>
+            <td class="tableleft"></td>
+            <td>
+                <button type="button" class="btn btn-primary" onclick="btn_save()">保存</button>				 &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<%}%>
+<script>
+    $(function () {
+        $('#backid').click(function(){
+            window.location.href="/userinfo";
+        });
+    });
+
+    function btn_save(){
+        var username = $("#txtusername").val();
+        if(username==""||username==null){
+            $("#txtusername").focus();
+            return;
+        }
+
+        var userpwd = $("#txtuserpwd").val();
+        if(userpwd==""||userpwd==null){
+            $("#txtuserpwd").focus();
+            return;
+        }
+
+        var userid = '${user.userID}';
+
+        $.post("/useredit",{username: username,userpwd:userpwd,userid:userid},function(serverData){
+            if(serverData=="ok"){
+                alert('更新成功！');
+                window.location = '/userinfo';
+            }else  {
+                alert("更新失败！");
+            }
+        });
+    }
+</script>
