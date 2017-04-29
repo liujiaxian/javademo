@@ -437,11 +437,11 @@ log4j.appender.file.layout.conversionPattern=%5p [%d{dd-MM-yyyy HH:mm:ss}] [%t] 
 > log4j配置需要注意，有个日志文件目录，需要对应你的计算机的盘符，没有会报错
 
 ### 项目结构
-![](/uploads/richtext/2/20170428101352.png)
+![](https://www.pqpqpq.cn/uploads/richtext/2/20170428101352.png)
 
 > 红色框代表新增的文件或目录，其中src->main->java,需要做如下操作才能添加java的包或类文件
 
-![](/uploads/richtext/2/20170428101722.png)
+![](https://www.pqpqpq.cn/uploads/richtext/2/20170428101722.png)
 
 设置为source root即可
 
