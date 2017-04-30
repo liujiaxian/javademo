@@ -54,10 +54,12 @@ public class UserDao {
         return jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
     }
 
-    public UserPo VerifyUser(String username,String userpwd) {
+    public Integer VerifyUser(String username,String userpwd) {
         // TODO Auto-generated method stub
-        String sql="select * from t_userinfo where userName=? and userPwd=?";
-        return (UserPo)jdbcTemplate.queryForMap(sql, username, userpwd);
+        String sql="select count(*) from t_userinfo where userName=? and userPwd=?";
+
+        Integer count = Integer.valueOf(jdbcTemplate.queryForObject(sql,new Object[] {username,userpwd},Integer.class));
+        return count;
     }
 
     public List<UserPo> findAll() {

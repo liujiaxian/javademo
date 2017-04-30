@@ -40,7 +40,7 @@ public class UserServer {
         return userDao.searchUser(id);
     }
 
-    public UserPo VerifyUser(String username,String userpwd) {
+    public Integer VerifyUser(String username,String userpwd) {
         return userDao.VerifyUser(username,userpwd);
     }
 

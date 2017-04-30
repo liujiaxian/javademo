@@ -54,12 +54,13 @@ public class AccountController {
         ApplicationContext context  =  new ClassPathXmlApplicationContext("../../WEB-INF/applicationContext.xml");
         UserServer server = (UserServer)context.getBean("userServer");
 
-        UserPo user = server.VerifyUser(username,userpwd);
-        if(user==null){
+        Integer count = server.VerifyUser(username,userpwd);
+
+        if(count<=0){
             return "error";
         }
 
-        session.setAttribute("loginobject",user);
+        session.setAttribute("loginobject",username);
 
         return "ok";
     }

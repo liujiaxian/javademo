@@ -3,6 +3,7 @@ package controller;
 import Dao.UserDao;
 import Po.UserPo;
 import Server.UserServer;
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,8 +31,12 @@ public class HomeController {
     public  static UserServer server = (UserServer)context.getBean("userServer");
 
     @RequestMapping
-    public ModelAndView main(){
+    public ModelAndView main(HttpSession session,HttpServletRequest request){
         ModelAndView view = new ModelAndView("main");
+
+        String name = session.getAttribute("loginobject").toString();
+
+        request.setAttribute("username",name);
 
         return view;
     }
@@ -136,6 +143,16 @@ public class HomeController {
         }
 
         server.deleteUser(userID);
+        return "ok";
+    }
+
+    @RequestMapping(value = "/account/layout",method = RequestMethod.POST)
+    @ResponseBody
+    public String layout(HttpSession session){
+        Object name = session.getAttribute("loginobject");
+        if(name!=null){
+            session.removeAttribute("loginobject");
+        }
         return "ok";
     }
 
