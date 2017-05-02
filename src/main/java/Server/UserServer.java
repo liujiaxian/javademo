@@ -44,6 +44,10 @@ public class UserServer {
         return userDao.VerifyUser(username,userpwd);
     }
 
+    public List<UserPo> findUserName(String username) {
+        return userDao.findUserName(username);
+    }
+
     public List<UserPo> findAll() {
         return userDao.findAll();
     }

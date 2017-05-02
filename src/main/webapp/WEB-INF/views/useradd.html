@@ -39,11 +39,11 @@
         }
 
         $.post("/useradd",{username: username,userpwd:userpwd},function(serverData){
-            if(serverData=="ok"){
+            if(serverData.status==0){
                 alert('添加成功！');
                 window.location = '/userinfo';
             }else  {
-                alert("添加失败！");
+                alert(serverData.msg);
             }
         });
     }

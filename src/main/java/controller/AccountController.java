@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import Po.UserPo;
 import Server.UserServer;
@@ -21,8 +22,8 @@ import Server.UserServer;
  * Created by Administrator on 2017/4/28 0028.
  */
 @Controller
-@RequestMapping("/account")
-public class AccountController {
+@RequestMapping(value = "/account",produces = "application/json; charset=utf-8")
+public class AccountController extends BaseController{
     @RequestMapping(value = "login",method = RequestMethod.GET)
     public ModelAndView login(){
         return new ModelAndView("/account/login");
@@ -34,21 +35,21 @@ public class AccountController {
 
         String username = request.getParameter("username");
         if(username==null||username==""){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"用户名称不能为空！",null);
         }
         String userpwd = request.getParameter("userpwd");
         if(userpwd==null||userpwd==""){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"用户密码不能为空！",null);
         }
         String verify = request.getParameter("verify").toLowerCase();
         if(verify==null||verify==""){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"验证码不能为空！",null);
         }
 
         String vcode = session.getAttribute("code").toString();
 
         if (!verify.equals(vcode)){
-            return "error1";
+            return JsonReturn(Enum_Type.验证码错误.ordinal(),"验证码错误！",null);
         }
 
         ApplicationContext context  =  new ClassPathXmlApplicationContext("../../WEB-INF/applicationContext.xml");
@@ -57,12 +58,12 @@ public class AccountController {
         Integer count = server.VerifyUser(username,userpwd);
 
         if(count<=0){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"用户名称或密码错误！",null);
         }
 
         session.setAttribute("loginobject",username);
 
-        return "ok";
+        return JsonReturn(Enum_Type.成功.ordinal(),"登录成功！",null);
     }
 
     /**

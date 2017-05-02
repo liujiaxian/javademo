@@ -1,9 +1,10 @@
 <%layout("/common/layout.html",{title:"用户信息"}){ %>
-<form class="form-inline definewidth m20" action="index.html" method="get">
+<form class="form-inline definewidth m20" action="/userinfosearch?" method="get">
     用户名称：
     <input type="text" name="username" id="username"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;
     <button type="submit" class="btn btn-primary">查询</button>&nbsp;&nbsp; <button type="button" class="btn btn-success" id="addnew">新增用户</button>
 </form>
+
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>
@@ -38,11 +39,11 @@
         if(confirm("确定要删除吗？"))
         {
             $.post("/userdelete",{userid:id},function(serverData){
-                if(serverData=="ok"){
+                if(serverData.status==0){
                     alert('删除成功！');
                     window.location = '/userinfo';
                 }else  {
-                    alert("删除失败！");
+                    alert(serverData.msg);
                 }
             });
         }

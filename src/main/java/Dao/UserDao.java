@@ -62,6 +62,13 @@ public class UserDao {
         return count;
     }
 
+    public List<UserPo> findUserName(String username) {
+        // TODO Auto-generated method stub
+        String sql = "select * from t_userinfo where userName like '%"+username+"%'";
+
+        return jdbcTemplate.query(sql, new UserRowMapper());
+    }
+
     public List<UserPo> findAll() {
         // TODO Auto-generated method stub
         String sql = "select * from t_userinfo";

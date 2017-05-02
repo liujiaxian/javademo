@@ -92,13 +92,13 @@
         }
 
         $.post("/account/login",{username:username,userpwd:userpwd,verify:verify},function(serverData){
-            if(serverData=="ok"){
+            if(serverData.status==0){
                 alert('登录成功！');
                 window.location = '/';
-            }else if(serverData=="error1"){
+            }else if(serverData.status==2){
                 alert('验证码错误！');
             }else{
-                alert("用户名或密码错误！");
+                alert(serverData.msg);
             }
             $("img").attr("src","/account/verify?id="+Math.random());
         });

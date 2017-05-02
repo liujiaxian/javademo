@@ -4,7 +4,7 @@
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="10%" class="tableleft">用户ID</td>
-            <td><input type="text" id="txtuserid" value="${user.userID}"/></td>
+            <td><input type="text" id="txtuserid" value="${user.userID}" readonly="readonly"/></td>
         </tr>
         <tr>
             <td class="tableleft">用户名称</td>
@@ -46,11 +46,11 @@
         var userid = '${user.userID}';
 
         $.post("/useredit",{username: username,userpwd:userpwd,userid:userid},function(serverData){
-            if(serverData=="ok"){
+            if(serverData.status==0){
                 alert('更新成功！');
                 window.location = '/userinfo';
             }else  {
-                alert("更新失败！");
+                alert(serverData.msg);
             }
         });
     }

@@ -4,6 +4,7 @@ import Dao.UserDao;
 import Po.UserPo;
 import Server.UserServer;
 import com.sun.deploy.net.HttpResponse;
+import org.beetl.json.JsonTool;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -24,8 +25,8 @@ import java.util.Locale;
  * Created by Administrator on 2017/4/28 0028.
  */
 @Controller
-@RequestMapping("/")
-public class HomeController {
+@RequestMapping(value = "/")
+public class HomeController extends BaseController {
 
     public static   ApplicationContext context  =  new ClassPathXmlApplicationContext("../../WEB-INF/applicationContext.xml");
     public  static UserServer server = (UserServer)context.getBean("userServer");
@@ -67,22 +68,35 @@ public class HomeController {
         return view;
     }
 
+    @RequestMapping(value = "/userinfosearch",method = RequestMethod.GET)
+    public ModelAndView userinfosearch(ModelMap model,HttpServletRequest req){
+        String username = req.getParameter("username");
+
+
+        ModelAndView view = new ModelAndView("userinfo");
+        List<UserPo> userlist = server.findUserName(username);
+
+        model.addAttribute("userlist",userlist);
+
+        return view;
+    }
+
     @RequestMapping(value = "/useradd",method = RequestMethod.GET)
     public ModelAndView useradd(){
         ModelAndView view = new ModelAndView("useradd");
         return view;
     }
 
-    @RequestMapping(value = "/useradd",method = RequestMethod.POST)
+    @RequestMapping(value = "/useradd",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
     public String useradd(HttpServletRequest request){
         String username = request.getParameter("username");
         if(username==null||username==""){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"用户名称不能为空！",null);
         }
         String userpwd = request.getParameter("userpwd");
         if(userpwd==null||userpwd==""){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"用户密码不能为空！",null);
         }
 
         UserPo user = new UserPo();
@@ -91,7 +105,7 @@ public class HomeController {
 
         server.addUser(user);
 
-        return "ok";
+        return JsonReturn(Enum_Type.成功.ordinal(),"用户添加成功！",null);
     }
 
     @RequestMapping(value = "/useredit/{userid}",method = RequestMethod.GET)
@@ -105,22 +119,22 @@ public class HomeController {
         return view;
     }
 
-    @RequestMapping(value = "/useredit",method = RequestMethod.POST)
+    @RequestMapping(value = "/useredit",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
     public String useredit(HttpServletRequest request){
         Integer userID = Integer.valueOf(request.getParameter("userid"));
         UserPo user = server.searchUser(userID);
         if (user==null){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"该数据不存在或已被删除！",null);
         }
 
         String username = request.getParameter("username");
         if(username==null||username==""){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"用户名称不能为空！",null);
         }
         String userpwd = request.getParameter("userpwd");
         if(userpwd==null||userpwd==""){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"用户密码不能为空！",null);
         }
 
         user.userName = username;
@@ -130,30 +144,30 @@ public class HomeController {
         server.updateUser(user);
 
 
-        return "ok";
+        return JsonReturn(Enum_Type.成功.ordinal(),"用户更新成功！",null);
     }
 
-    @RequestMapping(value = "/userdelete",method = RequestMethod.POST)
+    @RequestMapping(value = "/userdelete",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
     public String userdelete(HttpServletRequest request){
         Integer userID = Integer.valueOf(request.getParameter("userid"));
         UserPo user = server.searchUser(userID);
         if (user==null){
-            return "error";
+            return JsonReturn(Enum_Type.失败.ordinal(),"该用户不存在或已被删除！",null);
         }
 
         server.deleteUser(userID);
-        return "ok";
+        return JsonReturn(Enum_Type.成功.ordinal(),"用户删除成功！",null);
     }
 
-    @RequestMapping(value = "/account/layout",method = RequestMethod.POST)
+    @RequestMapping(value = "/account/layout",method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
     public String layout(HttpSession session){
         Object name = session.getAttribute("loginobject");
         if(name!=null){
             session.removeAttribute("loginobject");
         }
-        return "ok";
+        return JsonReturn(Enum_Type.成功.ordinal(),"用户退出成功！",null);
     }
 
     @RequestMapping(value = "2",method = RequestMethod.GET)

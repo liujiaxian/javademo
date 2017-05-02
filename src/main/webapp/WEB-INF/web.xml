@@ -28,7 +28,7 @@
     <init-param>
       <description>是否强制要求响应包编码与请求包相同，false表示如果响应包设置了自己编码则不强制修改</description>
       <param-name>forceEncoding</param-name>
-      <param-value>false</param-value>
+      <param-value>true</param-value>
     </init-param>
   </filter>
   <filter-mapping>
